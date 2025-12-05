@@ -26,7 +26,7 @@ theme: jekyll-theme-cayman
   <img src="https://upload.wikimedia.org/wikipedia/en/3/30/Java_programming_language_logo.svg" alt="Java Logo" width="120"/>
 </div>
 
-Java Comprehensive Guide
+# Java Comprehensive Guide
 
 *Jump to: [Basics](#0-java-basics) | [Control Flow](#1-control-flow-statements) | [OOP](#2-classes-and-functions) | [Collections](#8-arraylist) | [Exceptions](#15-exception-handling)*
 
