@@ -1,0 +1,1543 @@
+# Complete Java Concepts Guide
+
+## 0. Java Basics
+
+### Variables and Data Types
+
+In Java, a **variable** is a named container that stores a value in memory. Every variable has a name, a type, and a value. Java has a **strong type system**, meaning each variable must be declared with a specific data type before it can be used.
+
+Java has two categories of data types: **primitive types** and **reference types**.
+
+**Primitive types** store actual values directly in memory and are more memory-efficient. They are also faster because they don't require extra object overhead.
+
+**Reference types** store references (memory addresses) to objects stored in a heap memory area. This allows for more complex data structures and object-oriented programming capabilities.
+
+#### Primitive Data Types
+
+Java has **8 primitive data types**, which are the building blocks for working with simple values. These types are:
+
+- **Integer types**: byte, short, int, long - used for storing whole numbers
+- **Floating-point types**: float, double - used for storing decimal numbers
+- **Character type**: char - used for storing single characters
+- **Boolean type**: boolean - used for true/false logic
+
+Each primitive type has a specific size (in bytes) and range of values it can store. Choosing the right type depends on the range of values you need and memory considerations.
+
+```java
+public class PrimitiveTypes {
+    public static void main(String[] args) {
+        // Integer types
+        byte age = 25;              // 8-bit, range: -128 to 127
+        short year = 2025;          // 16-bit, range: -32,768 to 32,767
+        int population = 7800000;   // 32-bit, range: -2.1B to 2.1B
+        long distance = 9461000000000L;  // 64-bit, requires 'L' suffix
+        
+        // Floating-point types
+        float temperature = 98.6f;  // 32-bit, requires 'f' suffix
+        double price = 19.99;       // 64-bit, default for decimals
+        
+        // Character and boolean
+        char letter = 'A';          // Single character, 16-bit Unicode
+        boolean isActive = true;    // true or false
+        
+        System.out.println("Byte: " + age);
+        System.out.println("Long: " + distance);
+        System.out.println("Float: " + temperature);
+        System.out.println("Double: " + price);
+        System.out.println("Char: " + letter);
+        System.out.println("Boolean: " + isActive);
+    }
+}
+```
+
+#### Reference Data Types
+
+**Reference types** include classes, interfaces, and arrays. Unlike primitive types which store actual values, reference types store references (memory addresses) to objects. When you create a reference type variable, you're creating a pointer to an object in heap memory.
+
+Common reference types include:
+- **String**: A sequence of characters (immutable)
+- **Objects**: Instances of custom classes
+- **Arrays**: Collections of similar data types
+- **Collections**: ArrayList, HashMap, etc.
+
+An important concept is **null** - a special value indicating that a reference variable doesn't point to any object.
+
+```java
+public class ReferenceTypes {
+    public static void main(String[] args) {
+        // String (most common reference type)
+        String name = "Alice";
+        String city = new String("New York");
+        
+        // Objects
+        Person person = new Person("Bob", 30);
+        
+        // Arrays
+        int[] numbers = new int[5];
+        String[] fruits = {"Apple", "Banana", "Orange"};
+        
+        System.out.println("Name: " + name);
+        System.out.println("City: " + city);
+    }
+}
+
+class Person {
+    String name;
+    int age;
+    
+    Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+}
+```
+
+### Variable Initialization
+
+**Initialization** is the process of assigning an initial value to a variable when it's declared. This is different from **declaration**, which simply creates the variable.
+
+In Java:
+- **Local variables** (inside methods) must be initialized before use; they don't have default values
+- **Instance variables** (class fields) automatically get default values if not initialized
+- **Static/class variables** also get default values
+
+Proper initialization is critical for avoiding `NullPointerException` and other runtime errors. Variables can be initialized in several ways:
+
+```java
+public class VariableInitialization {
+    public static void main(String[] args) {
+        // 1. Explicit initialization
+        int x = 10;
+        String message = "Hello";
+        
+        // 2. Declaration and later initialization
+        int y;
+        y = 20;
+        
+        // 3. Using default values (fields only, not local variables)
+        // Local variables must be initialized before use
+        
+        // 4. Multiple initialization
+        int a = 5, b = 10, c = 15;
+        
+        // 5. Using expressions
+        int sum = x + y;
+        String greeting = "Hello, " + message;
+        
+        System.out.println("x = " + x);
+        System.out.println("y = " + y);
+        System.out.println("sum = " + sum);
+        System.out.println("greeting = " + greeting);
+    }
+}
+```
+
+#### Default Values in Classes
+
+When you declare instance variables (fields) in a class without initializing them, Java automatically assigns default values. This is a safety feature that prevents undefined behavior. Understanding these defaults is important when reading object state.
+
+Here's a complete reference of default values:
+- **Numeric types** (byte, short, int, long, float, double): 0 or 0.0
+- **boolean**: false
+- **char**: '\u0000' (the null character, which displays as blank)
+- **All reference types** (String, objects, arrays): null
+
+Note that this automatic initialization only happens for instance variables. Local variables in methods do NOT get default values and must be explicitly initialized.
+
+```java
+public class DefaultValues {
+    // These are class fields, they have default values
+    byte defaultByte;          // 0
+    short defaultShort;        // 0
+    int defaultInt;            // 0
+    long defaultLong;          // 0L
+    float defaultFloat;        // 0.0f
+    double defaultDouble;      // 0.0
+    char defaultChar;          // '\u0000' (null character)
+    boolean defaultBoolean;    // false
+    String defaultString;      // null
+    
+    public void displayDefaults() {
+        System.out.println("Default int: " + defaultInt);
+        System.out.println("Default boolean: " + defaultBoolean);
+        System.out.println("Default String: " + defaultString);
+    }
+    
+    public static void main(String[] args) {
+        DefaultValues obj = new DefaultValues();
+        obj.displayDefaults();
+    }
+}
+```
+
+### Type Casting
+
+**Type casting** is the process of converting a variable from one data type to another. This is necessary when you need to use a value in a context that expects a different type.
+
+There are two categories of type casting:
+
+1. **Implicit casting (widening conversion)**: Automatic conversion from a smaller type to a larger type. This happens automatically because there's no risk of data loss (e.g., int to double).
+   - Order: byte → short → int → long → float → double
+
+2. **Explicit casting (narrowing conversion)**: Manual conversion from a larger type to a smaller type. This requires a cast operator and can result in data loss (e.g., double to int loses decimal places).
+
+Other common conversions include converting between Strings and numeric types using wrapper classes like `Integer`, `Double`, etc.
+
+```java
+public class TypeCasting {
+    public static void main(String[] args) {
+        // 1. Implicit casting (widening) - automatic, no data loss
+        int intValue = 42;
+        double doubleValue = intValue;  // int to double
+        System.out.println("Double: " + doubleValue);  // 42.0
+        
+        // 2. Explicit casting (narrowing) - manual, potential data loss
+        double decimal = 19.99;
+        int intCasted = (int) decimal;  // double to int
+        System.out.println("Int casted: " + intCasted);  // 19
+        
+        // 3. String to number
+        String numberStr = "123";
+        int parsedInt = Integer.parseInt(numberStr);
+        double parsedDouble = Double.parseDouble("45.67");
+        System.out.println("Parsed int: " + parsedInt);
+        System.out.println("Parsed double: " + parsedDouble);
+        
+        // 4. Number to String
+        int number = 100;
+        String stringNumber = String.valueOf(number);
+        String stringNumber2 = Integer.toString(number);
+        System.out.println("String: " + stringNumber);
+    }
+}
+```
+
+### Operators
+
+Operators are symbols that perform operations on variables and values. Java has several categories:
+
+1. **Arithmetic operators** (+, -, *, /, %): Perform mathematical calculations. The modulus operator (%) returns the remainder of division.
+
+2. **Increment/Decrement operators** (++, --): Increase or decrease a value by 1. Pre-increment (++x) increments before use, post-increment (x++) increments after use.
+
+3. **Comparison operators** (==, !=, <, >, <=, >=): Compare two values and return boolean results (true/false).
+
+4. **Logical operators** (&&, ||, !): Used for boolean logic
+   - && (AND): Both conditions must be true
+   - || (OR): At least one condition must be true
+   - ! (NOT): Inverts the boolean value
+
+5. **Assignment operators** (=, +=, -=, etc.): Assign values to variables. Compound operators combine operation with assignment.
+
+6. **Ternary operator** (? :): A shorthand for if-else. Syntax: `condition ? valueIfTrue : valueIfFalse`
+
+**Operator precedence** determines the order in which operations are evaluated. Parentheses can override default precedence.
+
+```java
+public class Operators {
+    public static void main(String[] args) {
+        // 1. Arithmetic operators
+        int a = 15, b = 4;
+        System.out.println("Addition: " + (a + b));       // 19
+        System.out.println("Subtraction: " + (a - b));    // 11
+        System.out.println("Multiplication: " + (a * b)); // 60
+        System.out.println("Division: " + (a / b));       // 3
+        System.out.println("Modulus: " + (a % b));        // 3
+        
+        // 2. Increment and decrement
+        int x = 10;
+        System.out.println("x++: " + (x++));  // 10 (post-increment)
+        System.out.println("x: " + x);       // 11
+        System.out.println("++x: " + (++x)); // 12 (pre-increment)
+        
+        // 3. Comparison operators
+        System.out.println("a > b: " + (a > b));        // true
+        System.out.println("a == b: " + (a == b));      // false
+        System.out.println("a != b: " + (a != b));      // true
+        System.out.println("a >= b: " + (a >= b));      // true
+        
+        // 4. Logical operators
+        boolean p = true, q = false;
+        System.out.println("p && q: " + (p && q));      // false (AND)
+        System.out.println("p || q: " + (p || q));      // true (OR)
+        System.out.println("!p: " + (!p));              // false (NOT)
+        
+        // 5. Assignment operators
+        int num = 10;
+        num += 5;  // num = num + 5
+        System.out.println("After += 5: " + num);       // 15
+        num -= 3;  // num = num - 3
+        System.out.println("After -= 3: " + num);       // 12
+        num *= 2;  // num = num * 2
+        System.out.println("After *= 2: " + num);       // 24
+        
+        // 6. Ternary operator
+        int age = 20;
+        String status = (age >= 18) ? "Adult" : "Minor";
+        System.out.println("Status: " + status);        // Adult
+    }
+}
+```
+
+### Strings and String Methods
+
+A **String** is a sequence of characters and one of the most important reference types in Java. An important characteristic is that Strings are **immutable** - once created, they cannot be changed. Any operation that appears to modify a String actually creates a new String object.
+
+**Key String concepts:**
+- **String literals** are created using double quotes: "Hello"
+- **String concatenation** combines strings using + operator
+- **String comparison** should use `.equals()` method, not == operator (== compares references, not content)
+- **Escape sequences** like \n (newline), \t (tab), \\ (backslash) allow special characters
+
+**Common String methods:**
+- `.length()`: Returns the number of characters
+- `.charAt(index)`: Returns character at specific position
+- `.substring(start, end)`: Extracts part of string
+- `.toUpperCase()`, `.toLowerCase()`: Change case
+- `.indexOf()`, `.lastIndexOf()`: Search for characters
+- `.contains()`: Check if substring exists
+- `.replace()`: Replace all occurrences
+- `.split()`: Break string into array based on delimiter
+- `.trim()`: Remove leading/trailing whitespace
+
+Strings are used extensively in Java programs for user input/output, data processing, and text manipulation.
+
+```java
+public class StringOperations {
+    public static void main(String[] args) {
+        String str1 = "Hello";
+        String str2 = "World";
+        String str3 = "Hello";  // Same value as str1
+        
+        // 1. Concatenation
+        String result = str1 + " " + str2;
+        System.out.println("Concatenation: " + result);  // Hello World
+        
+        // 2. String comparison
+        System.out.println("str1 == str3: " + (str1 == str3));           // true (same reference)
+        System.out.println("str1.equals(str3): " + str1.equals(str3));   // true (same content)
+        System.out.println("str1.equalsIgnoreCase('hello'): " + str1.equalsIgnoreCase("hello"));  // true
+        
+        // 3. String length
+        System.out.println("Length of '" + str1 + "': " + str1.length()); // 5
+        
+        // 4. Character access
+        System.out.println("First character: " + str1.charAt(0));        // H
+        System.out.println("Last character: " + str1.charAt(str1.length() - 1));  // o
+        
+        // 5. Substring
+        System.out.println("Substring: " + str1.substring(1, 4));        // ell
+        System.out.println("Substring from index: " + str1.substring(1));  // ello
+        
+        // 6. Case conversion
+        System.out.println("Uppercase: " + str1.toUpperCase());          // HELLO
+        System.out.println("Lowercase: " + str1.toLowerCase());          // hello
+        
+        // 7. Search and replace
+        String sentence = "Java is great. Java is powerful.";
+        System.out.println("Contains 'great': " + sentence.contains("great")); // true
+        System.out.println("Index of 'is': " + sentence.indexOf("is"));       // 5
+        System.out.println("Last index of 'Java': " + sentence.lastIndexOf("Java")); // 16
+        System.out.println("Replace: " + sentence.replace("Java", "Python"));
+        
+        // 8. Trimming
+        String padded = "  Hello World  ";
+        System.out.println("Trimmed: '" + padded.trim() + "'");  // 'Hello World'
+        
+        // 9. Split
+        String csv = "apple,banana,orange,grape";
+        String[] fruits = csv.split(",");
+        for (String fruit : fruits) {
+            System.out.println(fruit);
+        }
+    }
+}
+```
+
+### Constants
+
+A **constant** is a variable whose value cannot be changed once assigned. In Java, you create constants using the `final` keyword.
+
+**Two types of constants:**
+
+1. **Class constants** (static final): Shared by all objects of the class. Convention is to use UPPERCASE_WITH_UNDERSCORES naming.
+   - These are typically public so other classes can access them
+   - Example: `public static final double PI = 3.14159;`
+
+2. **Instance constants** (final): Each object has its own copy. Can only be initialized once, usually in the constructor.
+   - Used for values that are specific to each object
+   - Example: `private final String userId;`
+
+Attempting to modify a final variable will result in a compile-time error, preventing bugs before runtime.
+
+```java
+public class Constants {
+    // Class constants (final and static)
+    public static final double PI = 3.14159;
+    public static final int MAX_USERS = 100;
+    public static final String APP_NAME = "My App";
+    
+    // Instance constants (final)
+    private final String userId;
+    
+    public Constants(String userId) {
+        this.userId = userId;  // Can only be initialized once
+    }
+    
+    public static void main(String[] args) {
+        System.out.println("PI: " + PI);
+        System.out.println("MAX_USERS: " + MAX_USERS);
+        System.out.println("APP_NAME: " + APP_NAME);
+        
+        Constants obj = new Constants("user123");
+        System.out.println("User ID: " + obj.userId);
+        
+        // This would cause a compile error:
+        // PI = 3.14;  // Cannot modify final variable
+    }
+}
+```
+
+---
+
+## 1. Control Flow Statements
+
+Control flow statements allow you to control the order in which code is executed. They enable decision-making and repetition in your programs.
+
+
+```java
+int age = 18;
+
+if (age >= 18) {
+    System.out.println("You are an adult");
+} else if (age >= 13) {
+    System.out.println("You are a teenager");
+} else {
+    System.out.println("You are a child");
+}
+```
+
+### Do-While Loop
+
+```java
+int count = 1;
+
+do {
+    System.out.println("Count: " + count);
+    count++;
+} while (count <= 5);
+```
+
+### While Loop
+
+
+```java
+int i = 0;
+while (i < 3) {
+    System.out.println("Iteration: " + i);
+    i++;
+}
+```
+
+### For Loop
+
+
+```java
+for (int i = 0; i < 5; i++) {
+    System.out.println("Number: " + i);
+}
+```
+
+**Enhanced For Loop (for-each):** Used to iterate through arrays and collections without managing an index.
+```java
+String[] fruits = {"Apple", "Banana", "Orange"};
+for (String fruit : fruits) {
+    System.out.println(fruit);
+}
+```
+
+---
+
+## 2. Classes and Functions
+
+### Basic Class Structure
+
+A class is a blueprint for creating objects. It contains fields (variables) and methods (functions). Classes enable **encapsulation** - bundling data and methods that operate on that data together, and hiding internal details from the outside world.
+
+**Key components of a class:**
+- **Fields (variables)**: Store data/state of the object
+- **Constructors**: Special methods that initialize new objects
+- **Methods**: Functions that define object behavior
+- **Getters/Setters**: Methods to access and modify fields safely
+
+**Access modifiers** control visibility:
+- **public**: Accessible from anywhere
+- **private**: Only within the class (encapsulation)
+- **protected**: Within package and subclasses
+- **default**: Within the same package only
+
+**The `this` keyword** refers to the current object instance.
+
+```java
+public class Student {
+    // Instance variables (fields)
+    private String name;
+    private int age;
+    private double gpa;
+    
+    // Constructor - special method to initialize objects
+    public Student(String name, int age, double gpa) {
+        this.name = name;  // 'this' refers to current object
+        this.age = age;
+        this.gpa = gpa;
+    }
+    
+    // Default constructor (no parameters)
+    public Student() {
+        this.name = "Unknown";
+        this.age = 0;
+        this.gpa = 0.0;
+    }
+    
+    // Getter methods (accessors)
+    public String getName() {
+        return name;
+    }
+    
+    public int getAge() {
+        return age;
+    }
+    
+    public double getGpa() {
+        return gpa;
+    }
+    
+    // Setter methods (mutators)
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    public void setAge(int age) {
+        if (age > 0) {
+            this.age = age;
+        }
+    }
+    
+    // Custom method
+    public void displayInfo() {
+        System.out.println("Name: " + name);
+        System.out.println("Age: " + age);
+        System.out.println("GPA: " + gpa);
+    }
+}
+
+// Usage
+public class Main {
+    public static void main(String[] args) {
+        Student s1 = new Student("Alice", 20, 3.8);
+        s1.displayInfo();
+        
+        Student s2 = new Student();
+        s2.setName("Bob");
+        s2.setAge(22);
+        System.out.println(s2.getName());
+    }
+}
+```
+
+### Constructor Concepts
+
+**Constructors** are special methods that initialize objects when they're created. Key points:
+
+- **Default Constructor**: Parameterless constructor provided by Java if no other constructor is defined
+- **Parameterized Constructor**: Constructor with parameters to initialize specific field values
+- **Constructor Overloading**: Having multiple constructors with different parameters
+- **Constructor Chaining**: Using `this()` to call another constructor in the same class
+
+**Benefits of constructors:**
+- Ensure objects are always in a valid state
+- Reduce repetitive initialization code
+- Allow creating objects with different initial values
+
+**Method Concepts:**
+
+- **Getter methods (accessors)**: Return the value of a private field
+- **Setter methods (mutators)**: Set/modify the value of a private field with validation
+- **Custom methods**: Perform specific operations or calculations
+- **Return type**: Specifies what type of value the method returns (`void` means no return value)
+- **Parameters**: Accept input values that methods use in their logic
+
+---
+
+## 3. Finding Second Largest Element- An example from Lab Qn
+
+This algorithm finds the second largest element in an array in a single pass (O(n) time complexity).
+
+**Algorithm explanation:**
+- Maintain two variables: `largest` and `secondLargest`
+- Iterate through the array once:
+  - If current element is larger than `largest`, shift `largest` to `secondLargest` and update `largest`
+  - Otherwise, if it's larger than `secondLargest` and different from `largest`, update `secondLargest`
+- Return `secondLargest` at the end
+
+**Key considerations:**
+- Handles edge cases like arrays smaller than 2 elements by throwing an exception
+- Uses `Integer.MIN_VALUE` to initialize variables (negative infinity)
+- Works in linear time, more efficient than sorting
+
+```java
+public class SecondLargest {
+
+    public static int findSecondLargest(int[] arr) {
+        if (arr.length < 2) {
+            System.out.println("Array must have at least 2 elements");
+            return 0; // or any neutral value you prefer
+        }
+
+        int largest, secondLargest;
+
+        // Initialize using the first two elements
+        if (arr[0] > arr[1]) {
+            largest = arr[0];
+            secondLargest = arr[1];
+        } else {
+            largest = arr[1];
+            secondLargest = arr[0];
+        }
+
+        // Process remaining elements
+        for (int i = 2; i < arr.length; i++) {
+            int num = arr[i];
+
+            if (num > largest) {
+                secondLargest = largest;
+                largest = num;
+            } else if (num > secondLargest && num != largest) {
+                secondLargest = num;
+            }
+        }
+
+        return secondLargest;
+    }
+
+    public static void main(String[] args) {
+        int[] numbers = {12, 35, 1, 10, 34, 1};
+        System.out.println("Second Largest: " + findSecondLargest(numbers));
+        // Output: 34
+    }
+}
+
+```
+
+---
+
+## 4. Array of Objects
+
+Arrays can store multiple objects of the same type. This is useful for managing collections of related objects.
+
+**Key concepts:**
+- **Declaration**: `Book[] library = new Book[3];` creates an array that can hold 3 Book objects
+- **Initialization**: Each element must be initialized with `new` before use
+- **Accessing**: Use index notation like `library[0]` to access individual objects
+- **Iteration**: Use enhanced for loop (`for-each`) to iterate through all objects
+
+```java
+public class Book {
+    private String title;
+    private String author;
+    private double price;
+    
+    public Book(String title, String author, double price) {
+        this.title = title;
+        this.author = author;
+        this.price = price;
+    }
+    
+    public void display() {
+        System.out.println(title + " by " + author + " - $" + price);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        // Create array of Book objects
+        Book[] library = new Book[3];
+        
+        library[0] = new Book("1984", "George Orwell", 15.99);
+        library[1] = new Book("To Kill a Mockingbird", "Harper Lee", 12.50);
+        library[2] = new Book("The Great Gatsby", "F. Scott Fitzgerald", 10.99);
+        
+        // Display all books
+        for (Book book : library) {
+            book.display();
+        }
+    }
+}
+```
+
+---
+
+## 5. StringTokenizer
+
+`StringTokenizer` is used to break a string into tokens (smaller parts) based on delimiters.
+
+**Key concepts:**
+- **Default delimiter**: Space character (space, tab, newline)
+- **Custom delimiter**: Specify any character(s) as the delimiter
+- **countTokens()**: Returns the number of tokens (decreases as you iterate)
+- **hasMoreTokens()**: Checks if more tokens are available
+- **nextToken()**: Retrieves the next token
+
+
+```java
+import java.util.StringTokenizer;
+
+public class TokenizerExample {
+    public static void main(String[] args) {
+        String sentence = "Java is a powerful programming language";
+        
+        // Default delimiter is space
+        StringTokenizer st = new StringTokenizer(sentence);
+        
+        System.out.println("Number of tokens: " + st.countTokens());
+        
+        while (st.hasMoreTokens()) {
+            System.out.println(st.nextToken());
+        }
+        
+        // Custom delimiter
+        String data = "apple,banana,orange,grape";
+        StringTokenizer st2 = new StringTokenizer(data, ",");
+        
+        while (st2.hasMoreTokens()) {
+            System.out.println(st2.nextToken());
+        }
+    }
+}
+```
+
+---
+
+## 6. StringBuffer
+
+`StringBuffer` is a mutable sequence of characters, unlike `String` which is immutable. It's thread-safe.
+
+**Key methods:**
+- `.append()`: Add text to the end
+- `.insert()`: Add text at a specific position
+- `.replace()`: Replace a portion of the string
+- `.delete()`: Remove characters
+- `.reverse()`: Reverse the string
+- `.length()`: Get current length
+- `.capacity()`: Get internal buffer capacity
+
+**Capacity vs Length:**
+- **Length**: Number of actual characters
+- **Capacity**: Size of internal buffer (grows automatically when needed)
+
+
+```java
+public class StringBufferExample {
+    public static void main(String[] args) {
+        StringBuffer sb = new StringBuffer("Hello");
+        
+        // Append
+        sb.append(" World");
+        System.out.println(sb);  // Hello World
+        
+        // Insert
+        sb.insert(6, "Beautiful ");
+        System.out.println(sb);  // Hello Beautiful World
+        
+        // Replace
+        sb.replace(6, 15, "Java");
+        System.out.println(sb);  // Hello Java World
+        
+        // Delete
+        sb.delete(5, 10);
+        System.out.println(sb);  // HelloWorld
+        
+        // Reverse
+        sb.reverse();
+        System.out.println(sb);  // dlroWolleH
+        
+        // Capacity and length
+        System.out.println("Length: " + sb.length());
+        System.out.println("Capacity: " + sb.capacity());
+    }
+}
+```
+
+---
+
+## 7. Multidimensional Arrays
+
+Arrays can have multiple dimensions, commonly used for matrices and tables.
+
+**Key concepts:**
+- **Declaration**: `int[][] matrix = new int[rows][columns];`
+- **Access**: `matrix[row][column]` accesses an element
+- **Initialization**: Can initialize with values or create empty arrays
+- **Iteration**: Nested loops for 2D, triple nested for 3D
+
+```java
+public class MultidimensionalArrays {
+    public static void main(String[] args) {
+        // 2D Array (Matrix)
+        int[][] matrix = {
+            {1, 2, 3},
+            {4, 5, 6},
+            {7, 8, 9}
+        };
+        
+        // Accessing elements
+        System.out.println("Element at [1][2]: " + matrix[1][2]);  // 6
+        
+        // Traversing 2D array
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                System.out.print(matrix[i][j] + " ");
+            }
+            System.out.println();
+        }
+        
+        // Jagged array (arrays with different column sizes)
+        int[][] jagged = new int[3][];
+        jagged[0] = new int[2];
+        jagged[1] = new int[4];
+        jagged[2] = new int[3];
+        
+        // 3D Array
+        int[][][] cube = new int[2][3][4];
+        cube[0][1][2] = 100;
+    }
+}
+```
+
+---
+
+## 8. ArrayList
+
+`ArrayList` is a resizable array implementation from the Collections framework.
+
+**Common operations:**
+- `.add(element)`: Add at end, O(1) amortized
+- `.add(index, element)`: Add at position, O(n) (needs shifting)
+- `.get(index)`: Access element, O(1)
+- `.remove(index)`: Remove by index, O(n) (needs shifting)
+- `.size()`: Get number of elements, O(1)
+- `.contains()`: Check if element exists, O(n)
+
+```java
+import java.util.ArrayList;
+
+public class ArrayListExample {
+    public static void main(String[] args) {
+        // Create ArrayList
+        ArrayList<String> fruits = new ArrayList<>();
+        
+        // Add elements
+        fruits.add("Apple");
+        fruits.add("Banana");
+        fruits.add("Orange");
+        fruits.add("Mango");
+        
+        // Add at specific index
+        fruits.add(1, "Grapes");
+        
+        // Get element
+        System.out.println("First fruit: " + fruits.get(0));
+        
+        // Size
+        System.out.println("Size: " + fruits.size());
+        
+        // Check if contains
+        System.out.println("Contains Banana? " + fruits.contains("Banana"));
+        
+        // Remove element
+        fruits.remove("Orange");
+        fruits.remove(0);  // Remove by index
+        
+        // Iterate
+        for (String fruit : fruits) {
+            System.out.println(fruit);
+        }
+        
+        // Clear all elements
+        fruits.clear();
+        System.out.println("Is empty? " + fruits.isEmpty());
+    }
+}
+```
+
+---
+
+## 9. LinkedList
+
+`LinkedList` is a doubly-linked list implementation, efficient for insertions and deletions.
+
+**Common operations:**
+- `.add(element)`: Add at end, O(1)
+- `.addFirst(element)`: Add at beginning, O(1)
+- `.addLast(element)`: Add at end, O(1)
+- `.get(index)`: Access element, O(n) (must traverse from start)
+- `.remove(index)`: Remove by index, O(n)
+- `.removeFirst()`, `.removeLast()`: Remove ends, O(1)
+- `.getFirst()`, `.getLast()`: Access ends, O(1)
+- `.peek()`, `.poll()`: Queue operations
+
+```java
+import java.util.LinkedList;
+
+public class LinkedListExample {
+    public static void main(String[] args) {
+        LinkedList<Integer> numbers = new LinkedList<>();
+        
+        // Add elements
+        numbers.add(10);
+        numbers.add(20);
+        numbers.add(30);
+        
+        // Add at beginning and end
+        numbers.addFirst(5);
+        numbers.addLast(40);
+        
+        System.out.println(numbers);  // [5, 10, 20, 30, 40]
+        
+        // Get first and last
+        System.out.println("First: " + numbers.getFirst());
+        System.out.println("Last: " + numbers.getLast());
+        
+        // Remove first and last
+        numbers.removeFirst();
+        numbers.removeLast();
+        
+        System.out.println(numbers);  // [10, 20, 30]
+        
+        // Peek (view without removing)
+        System.out.println("Peek: " + numbers.peek());
+        
+        // Poll (retrieve and remove)
+        System.out.println("Poll: " + numbers.poll());
+        System.out.println(numbers);  // [20, 30]
+    }
+}
+```
+
+---
+
+## 10. ListIterator and List
+
+`ListIterator` allows bidirectional traversal of a list and modification during iteration.
+
+**ListIterator capabilities:**
+- **Forward traversal**: `.hasNext()` and `.next()`
+- **Backward traversal**: `.hasPrevious()` and `.previous()`
+- **Modification during iteration**: `.set()` to replace, `.remove()` to delete
+- **Index access**: `.nextIndex()` and `.previousIndex()`
+
+
+
+**Common patterns:**
+- Forward iteration: Start with `listIterator()`, use `.hasNext()` and `.next()`
+- Backward iteration: Start at end with `.hasNext()` first, then use `.hasPrevious()` and `.previous()`
+- Filtering: Remove elements matching criteria while iterating
+
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
+
+public class ListIteratorExample {
+    public static void main(String[] args) {
+        List<String> colors = new ArrayList<>();
+        colors.add("Red");
+        colors.add("Green");
+        colors.add("Blue");
+        colors.add("Yellow");
+        
+        // Forward iteration
+        System.out.println("Forward:");
+        ListIterator<String> iterator = colors.listIterator();
+        while (iterator.hasNext()) {
+            System.out.println(iterator.next());
+        }
+        
+        // Backward iteration
+        System.out.println("\nBackward:");
+        while (iterator.hasPrevious()) {
+            System.out.println(iterator.previous());
+        }
+        
+        // Modify during iteration
+        iterator = colors.listIterator();
+        while (iterator.hasNext()) {
+            String color = iterator.next();
+            if (color.equals("Green")) {
+                iterator.set("Dark Green");  // Replace
+            }
+            if (color.equals("Blue")) {
+                iterator.remove();  // Remove
+            }
+        }
+        
+        System.out.println("\nModified list: " + colors);
+    }
+}
+```
+
+---
+
+## 11. Inheritance using extends and super
+
+Inheritance allows a class to inherit properties and methods from another class.
+
+**Core concepts:**
+- **Parent/Base class (Superclass)**: Contains common properties and methods
+- **Child/Derived class (Subclass)**: Inherits from parent and can add/override behavior
+- **IS-A relationship**: Subclass IS-A type of parent class
+- **Code reuse**: Avoid duplicating common code across classes
+
+**Protected keyword:**
+- `.Protected` members are accessible in subclasses
+- Unlike private (only in same class), protected allows inheritance access
+- Key for inheritance relationships
+
+
+**Types of inheritance:**
+- **Single inheritance**: One child extends one parent (Java supports this)
+- **Multi-level inheritance**: A extends B extends C (chain of inheritance)
+- **Hierarchical inheritance**: Multiple classes extend same parent
+- **Multiple inheritance**: Not directly supported (use interfaces instead)
+
+**Method overriding:**
+- Child provides its own implementation of parent's method
+- Signature must match parent method
+- Use `@Override` annotation for clarity (helps catch errors)
+
+```java
+// Parent class (Superclass)
+class Animal {
+    protected String name;
+    protected int age;
+    
+    public Animal(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+    
+    public void eat() {
+        System.out.println(name + " is eating");
+    }
+    
+    public void sleep() {
+        System.out.println(name + " is sleeping");
+    }
+}
+
+// Child class (Subclass)
+class Dog extends Animal {
+    private String breed;
+    
+    public Dog(String name, int age, String breed) {
+        super(name, age);  // Call parent constructor
+        this.breed = breed;
+    }
+    
+    public void bark() {
+        System.out.println(name + " is barking");
+    }
+    
+    public void displayInfo() {
+        System.out.println("Name: " + name);
+        System.out.println("Age: " + age);
+        System.out.println("Breed: " + breed);
+    }
+}
+
+// Another child class
+class Cat extends Animal {
+    private String color;
+    
+    public Cat(String name, int age, String color) {
+        super(name, age);
+        this.color = color;
+    }
+    
+    public void meow() {
+        System.out.println(name + " is meowing");
+    }
+}
+
+public class InheritanceExample {
+    public static void main(String[] args) {
+        Dog dog = new Dog("Buddy", 3, "Golden Retriever");
+        dog.eat();        // Inherited method
+        dog.sleep();      // Inherited method
+        dog.bark();       // Dog's own method
+        dog.displayInfo();
+        
+        Cat cat = new Cat("Whiskers", 2, "White");
+        cat.eat();
+        cat.meow();
+    }
+}
+```
+
+---
+
+## 12. Interfaces
+
+An interface is a contract that defines methods a class must implement. It supports multiple inheritance.
+
+**Key concepts:**
+- **Abstract methods**: Methods without implementation (body)
+- **Contract**: Any class implementing the interface must provide implementations
+- **Multiple inheritance**: A class can implement multiple interfaces (Java's way around single inheritance)
+- **Polymorphism**: Can treat different implementations through the interface type
+
+**Practical examples:**
+- `Comparable` interface: Define natural ordering
+- `Iterable` interface: Enable for-each loops
+- `Runnable` interface: Define task for threads
+- Database connection interfaces: Support different databases with same interface
+
+```java
+// Interface definition
+interface Drawable {
+    void draw();  // abstract method (no body)
+    
+    // Default method (Java 8+)
+    default void display() {
+        System.out.println("Displaying drawable object");
+    }
+    
+    // Static method
+    static void info() {
+        System.out.println("This is a Drawable interface");
+    }
+}
+
+interface Resizable {
+    void resize(int width, int height);
+}
+
+// Class implementing single interface
+class Circle implements Drawable {
+    private int radius;
+    
+    public Circle(int radius) {
+        this.radius = radius;
+    }
+    
+    @Override
+    public void draw() {
+        System.out.println("Drawing circle with radius: " + radius);
+    }
+}
+
+// Class implementing multiple interfaces
+class Rectangle implements Drawable, Resizable {
+    private int width;
+    private int height;
+    
+    public Rectangle(int width, int height) {
+        this.width = width;
+        this.height = height;
+    }
+    
+    @Override
+    public void draw() {
+        System.out.println("Drawing rectangle: " + width + "x" + height);
+    }
+    
+    @Override
+    public void resize(int width, int height) {
+        this.width = width;
+        this.height = height;
+        System.out.println("Resized to: " + width + "x" + height);
+    }
+}
+
+public class InterfaceExample {
+    public static void main(String[] args) {
+        Circle circle = new Circle(5);
+        circle.draw();
+        circle.display();  // Default method
+        
+        Rectangle rect = new Rectangle(10, 20);
+        rect.draw();
+        rect.resize(15, 25);
+        
+        Drawable.info();  // Static method
+    }
+}
+```
+
+---
+
+## 13. Comparable Interface
+
+`Comparable` interface is used to define natural ordering of objects. It contains one method: `compareTo()`.
+
+**The `compareTo()` method:**
+- Returns negative number if current object < other object
+- Returns zero if current object == other object
+- Returns positive number if current object > other object
+
+```java
+import java.util.ArrayList;
+import java.util.Collections;
+
+class Student implements Comparable<Student> {
+    private String name;
+    private int age;
+    private double gpa;
+    
+    public Student(String name, int age, double gpa) {
+        this.name = name;
+        this.age = age;
+        this.gpa = gpa;
+    }
+    
+    // Natural ordering by GPA
+    @Override
+    public int compareTo(Student other) {
+        // Ascending order
+        if (this.gpa < other.gpa) return -1;
+        if (this.gpa > other.gpa) return 1;
+        return 0;
+        
+        // Alternative: return Double.compare(this.gpa, other.gpa);
+    }
+    
+    @Override
+    public String toString() {
+        return name + " (Age: " + age + ", GPA: " + gpa + ")";
+    }
+    
+    public String getName() { return name; }
+    public int getAge() { return age; }
+    public double getGpa() { return gpa; }
+}
+
+public class ComparableExample {
+    public static void main(String[] args) {
+        ArrayList<Student> students = new ArrayList<>();
+        students.add(new Student("Alice", 20, 3.8));
+        students.add(new Student("Bob", 22, 3.5));
+        students.add(new Student("Charlie", 21, 3.9));
+        students.add(new Student("Diana", 19, 3.6));
+        
+        System.out.println("Before sorting:");
+        for (Student s : students) {
+            System.out.println(s);
+        }
+        
+        // Sort using natural ordering (Comparable)
+        Collections.sort(students);
+        
+        System.out.println("\nAfter sorting by GPA:");
+        for (Student s : students) {
+            System.out.println(s);
+        }
+    }
+}
+```
+
+---
+
+## 14. Comparator Interface
+
+`Comparator` is used to define custom ordering, separate from the class itself. Multiple comparators can be created.
+
+
+**The `compare(E o1, E o2)` method:**
+- Returns negative number if o1 < o2
+- Returns zero if o1 == o2
+- Returns positive number if o1 > o2
+
+```java
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
+class Employee {
+    private String name;
+    private int age;
+    private double salary;
+    
+    public Employee(String name, int age, double salary) {
+        this.name = name;
+        this.age = age;
+        this.salary = salary;
+    }
+    
+    @Override
+    public String toString() {
+        return name + " (Age: " + age + ", Salary: $" + salary + ")";
+    }
+    
+    public String getName() { return name; }
+    public int getAge() { return age; }
+    public double getSalary() { return salary; }
+}
+
+// Comparator for sorting by name
+class NameComparator implements Comparator<Employee> {
+    @Override
+    public int compare(Employee e1, Employee e2) {
+        return e1.getName().compareTo(e2.getName());
+    }
+}
+
+// Comparator for sorting by age
+class AgeComparator implements Comparator<Employee> {
+    @Override
+    public int compare(Employee e1, Employee e2) {
+        return Integer.compare(e1.getAge(), e2.getAge());
+    }
+}
+
+// Comparator for sorting by salary (descending)
+class SalaryComparator implements Comparator<Employee> {
+    @Override
+    public int compare(Employee e1, Employee e2) {
+        return Double.compare(e2.getSalary(), e1.getSalary());
+    }
+}
+
+public class ComparatorExample {
+    public static void main(String[] args) {
+        ArrayList<Employee> employees = new ArrayList<>();
+        employees.add(new Employee("John", 30, 50000));
+        employees.add(new Employee("Alice", 25, 60000));
+        employees.add(new Employee("Bob", 35, 55000));
+        employees.add(new Employee("Diana", 28, 58000));
+        
+        System.out.println("Original list:");
+        employees.forEach(System.out::println);
+        
+        // Sort by name
+        Collections.sort(employees, new NameComparator());
+        System.out.println("\nSorted by name:");
+        employees.forEach(System.out::println);
+        
+        // Sort by age
+        Collections.sort(employees, new AgeComparator());
+        System.out.println("\nSorted by age:");
+        employees.forEach(System.out::println);
+        
+        // Sort by salary (descending)
+        Collections.sort(employees, new SalaryComparator());
+        System.out.println("\nSorted by salary (descending):");
+        employees.forEach(System.out::println);
+        
+        // Using lambda expression (Java 8+)
+        Collections.sort(employees, (e1, e2) -> e1.getName().compareTo(e2.getName()));
+        System.out.println("\nSorted by name using lambda:");
+        employees.forEach(System.out::println);
+    }
+}
+```
+
+---
+
+## 15. Exception Handling
+
+Exception handling allows you to gracefully handle runtime errors instead of crashing the program.
+
+**Exception hierarchy:**
+- **Throwable**: Root class for all exceptions
+  - **Exception**: Checked exceptions (must be handled)
+    - **IOException**: File/IO errors
+    - **SQLException**: Database errors
+    - **Custom exceptions**: Your own exception types
+  - **RuntimeException**: Unchecked exceptions (don't need to be caught)
+  - **Error**: Serious issues (usually not caught)
+
+
+**Try-catch flow:**
+1. Try block executes normally
+2. If exception occurs, jump to matching catch block
+3. If no catch matches, exception propagates up
+4. Finally block always executes (cleanup code)
+5. Program continues after try-catch-finally
+
+### Try-Catch Block
+
+The try-catch block is the most basic exception handling mechanism.
+
+```java
+public class TryCatchExample {
+    public static void main(String[] args) {
+        try {
+            int[] numbers = {1, 2, 3};
+            System.out.println(numbers[5]);  // ArrayIndexOutOfBoundsException
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("Error: Array index out of bounds");
+            System.out.println("Message: " + e.getMessage());
+        }
+        
+        System.out.println("Program continues...");
+    }
+}
+```
+
+### Multiple Catch Blocks
+
+Java allows multiple catch blocks to handle different exception types.
+
+**Catch order matters:**
+- More specific exceptions first, general exceptions last
+- If you catch `Exception` first, more specific catches never execute
+- Only the first matching catch block executes
+
+```java
+public class MultipleCatchExample {
+    public static void main(String[] args) {
+        try {
+            String str = null;
+            System.out.println(str.length());  // NullPointerException
+            
+            int result = 10 / 0;  // ArithmeticException
+        } catch (NullPointerException e) {
+            System.out.println("Null pointer error: " + e.getMessage());
+        } catch (ArithmeticException e) {
+            System.out.println("Arithmetic error: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("General error: " + e.getMessage());
+        }
+    }
+}
+```
+
+### Finally Block
+
+The `finally` block always executes, regardless of whether an exception occurred.
+
+**When finally executes:**
+- After try block if no exception
+- After catch block if exception caught
+- Even if try/catch has return statement
+- Not executed only if JVM exits (System.exit()) or infinite loop
+
+```java
+public class FinallyExample {
+    public static void main(String[] args) {
+        try {
+            int result = 10 / 2;
+            System.out.println("Result: " + result);
+        } catch (ArithmeticException e) {
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+            System.out.println("Finally block always executes");
+            // Cleanup code (close files, connections, etc.)
+        }
+    }
+}
+```
+
+### Throw Keyword
+
+`throw` is used to explicitly throw an exception in your code.
+
+**When to use throw:**
+- Validate input and throw appropriate exception if invalid
+- Detect error conditions and alert caller
+
+
+**Creating exceptions:**
+- `throw new ExceptionType("message");` creates and throws new exception
+- Include meaningful message for debugging
+- Stop at throw - code after never executes
+
+```java
+public class ThrowExample {
+    public static void checkAge(int age) {
+        if (age < 18) {
+            throw new ArithmeticException("Age must be 18 or above");
+        } else {
+            System.out.println("Access granted");
+        }
+    }
+    
+    public static void main(String[] args) {
+        try {
+            checkAge(15);
+        } catch (ArithmeticException e) {
+            System.out.println("Exception caught: " + e.getMessage());
+        }
+    }
+}
+```
+
+### Throws Keyword
+
+`throws` declares that a method may throw exceptions, delegating handling to the caller.
+
+**throws vs throw:**
+- **throw**: Explicitly throw an exception in the code
+- **throws**: Declare that method MAY throw exceptions (in method signature)
+
+**Method signature with throws:**
+```
+public void method() throws IOException, SQLException {
+    // Code that might throw these exceptions
+}
+```
+
+
+**When to use throws:**
+- When method calls code that throws checked exceptions
+- When you can't handle the exception in current method
+- When caller is in better position to handle it
+- For API methods to inform users of possible exceptions
+
+```java
+import java.io.IOException;
+
+public class ThrowsExample {
+    public static void readFile() throws IOException {
+        throw new IOException("File not found");
+    }
+    
+    public static void processFile() throws IOException {
+        readFile();  // Propagating exception
+    }
+    
+    public static void main(String[] args) {
+        try {
+            processFile();
+        } catch (IOException e) {
+            System.out.println("Caught: " + e.getMessage());
+        }
+    }
+}
+```
+---
+
+## Summary of Key Concepts
+
+### Comparable vs Comparator
+- **Comparable**: Define natural ordering within the class itself using `compareTo()`
+- **Comparator**: Define external custom ordering using `compare()`
+
+### throw vs throws
+- **throw**: Used to explicitly throw an exception in code
+- **throws**: Used in method signature to declare exceptions that might be thrown
+
+### ArrayList vs LinkedList
+- **ArrayList**: Fast random access, slower insertions/deletions
+- **LinkedList**: Slower random access, faster insertions/deletions
+
+### Access Modifiers
+- **public**: Accessible everywhere
+- **private**: Only within the same class
+- **protected**: Same package + subclasses
+- **default**: Same package only
+
+---
+
+**All the best and ace your lab compres!!!**
