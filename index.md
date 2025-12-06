@@ -50,7 +50,7 @@ theme: jekyll-theme-cayman
 * [13. Comparable Interface](#13-comparable-interface)
 * [14. Comparator Interface](#14-comparator-interface)
 * [15. Exception Handling](#15-exception-handling)
-* [Summary of Key Concepts](#summary-of-key-concepts)
+* [Complete example incorporating all the concepts](#16-Complete-example-incorporating-all-the-concepts)
 
 ---
 
@@ -1747,9 +1747,6 @@ public class CompleteDemoWithoutThreads {
             s.printInfo();
         }
 
-        // ----------------------------
-        // NO THREADS — Calculate average age directly
-        // ----------------------------
         int totalAge = 0;
         for (Student s : students) {
             totalAge += s.getAge();
