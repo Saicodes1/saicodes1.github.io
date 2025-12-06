@@ -1558,6 +1558,9 @@ public class ThrowsExample {
     }
 }
 ```
+---
+
+
 ## 16. Complete example incorporating all the concepts
 We will create a small application that:
 
