@@ -577,6 +577,29 @@ public class Main {
   } ```
 
 - **Parameterized Constructor**: Constructor with parameters to initialize specific field values
+  ```java
+  class Student {
+    String name;
+    int age;
+
+    // Parameterized constructor
+    Student(String n, int a) {
+        name = n;
+        age = a;
+    }
+
+    void display() {
+        System.out.println("Name: " + name + ", Age: " + age);
+    }
+  }
+
+  public class Main {
+    public static void main(String[] args) {
+        Student s = new Student("Uday", 20);
+        s.display();
+    }
+  }``` 
+  
 - **Constructor Overloading**: Having multiple constructors with different parameters
 - **Constructor Chaining**: Using `this()` to call another constructor in the same class
 
