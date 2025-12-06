@@ -50,7 +50,7 @@ theme: jekyll-theme-cayman
 * [13. Comparable Interface](#13-comparable-interface)
 * [14. Comparator Interface](#14-comparator-interface)
 * [15. Exception Handling](#15-exception-handling)
-* [Complete example incorporating all the concepts](#16-Complete-example-incorporating-all-the-concepts)
+* [16. Complete example incorporating all the concepts](#16-Complete-example-incorporating-all-the-concepts)
 
 ---
 
@@ -238,9 +238,8 @@ Operators are symbols that perform operations on variables and values. Java has 
 
 3. **Comparison operators** (==, !=, <, >, <=, >=): Compare two values and return boolean results (true/false).
 
-4. **Logical operators** (&&, ||, !): Used for boolean logic
+4. **Logical operators** (&&, !): Used for boolean logic
    - && (AND): Both conditions must be true
-   - || (OR): At least one condition must be true
    - ! (NOT): Inverts the boolean value
 
 5. **Assignment operators** (=, +=, -=, etc.): Assign values to variables. Compound operators combine operation with assignment.
@@ -1567,7 +1566,7 @@ Each student has a name, age, and grade. The Student class will inherit from an 
 We will implement an interface Printable to print student details.
 We will use the Comparable interface to sort students by name.
 We will handle exceptions if the user enters invalid data (such as a negative age).
-We will store students in an ArrayList and use a separate thread to simulate a slow processing task (e.g., calculating average age).
+We will store students in an ArrayList and calculate average age.
 We will print results after sorting, and also print the final results.
 
 ``` java
