@@ -601,9 +601,6 @@ public class Main {
     }
   }
   ``` 
-  
-- **Constructor Overloading**: Having multiple constructors with different parameters
-- **Constructor Chaining**: Using `this()` to call another constructor in the same class
 
 **Method Concepts:**
 
