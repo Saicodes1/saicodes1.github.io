@@ -601,7 +601,87 @@ public class Main {
   }``` 
   
 - **Constructor Overloading**: Having multiple constructors with different parameters
+```java
+class Student {
+    String name;
+    int age;
+
+    // No-arg constructor
+    Student() {
+        name = "Unknown";
+        age = 0;
+    }
+
+    // One-parameter constructor
+    Student(String n) {
+        name = n;
+        age = 18;  // default age
+    }
+
+    // Two-parameter constructor
+    Student(String n, int a) {
+        name = n;
+        age = a;
+    }
+
+    void display() {
+        System.out.println("Name: " + name + ", Age: " + age);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Student s1 = new Student();
+        Student s2 = new Student("Uday");
+        Student s3 = new Student("Uday", 20);
+
+        s1.display();
+        s2.display();
+        s3.display();
+    }
+}
+```
 - **Constructor Chaining**: Using `this()` to call another constructor in the same class
+```java
+class Student {
+    String name;
+    int age;
+    String course;
+
+    // 1st constructor
+    Student() {
+        this("Unknown");  // calling constructor #2
+    }
+
+    // 2nd constructor
+    Student(String n) {
+        this(n, 18);  // calling constructor #3
+    }
+
+    // 3rd constructor
+    Student(String n, int a) {
+        this(n, a, "Not Assigned");  // calling constructor #4
+    }
+
+    // 4th constructor
+    Student(String n, int a, String c) {
+        name = n;
+        age = a;
+        course = c;
+    }
+
+    void display() {
+        System.out.println("Name: " + name + ", Age: " + age + ", Course: " + course);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Student s = new Student();
+        s.display();
+    }
+}
+```
 
 **Method Concepts:**
 
@@ -1560,27 +1640,131 @@ public class ThrowsExample {
     }
 }
 ```
----
+## 16. Complete example incorporating all the concepts
+We will create a small application that:
 
-## Summary of Key Concepts
+Prompts the user to enter a list of students.
+Each student has a name, age, and grade. The Student class will inherit from an abstract Person class.
+We will implement an interface Printable to print student details.
+We will use the Comparable interface to sort students by name.
+We will handle exceptions if the user enters invalid data (such as a negative age).
+We will store students in an ArrayList and use a separate thread to simulate a slow processing task (e.g., calculating average age).
+We will print results after sorting, and also print the final results.
 
-### Comparable vs Comparator
-- **Comparable**: Define natural ordering within the class itself using `compareTo()`
-- **Comparator**: Define external custom ordering using `compare()`
+``` java
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Scanner;
 
-### throw vs throws
-- **throw**: Used to explicitly throw an exception in code
-- **throws**: Used in method signature to declare exceptions that might be thrown
+// Interface for printing details
+interface Printable {
+    void printInfo();
+}
 
-### ArrayList vs LinkedList
-- **ArrayList**: Fast random access, slower insertions/deletions
-- **LinkedList**: Slower random access, faster insertions/deletions
+// Abstract Person class
+abstract class Person {
+    protected String name;
+    protected int age;
 
-### Access Modifiers
-- **public**: Accessible everywhere
-- **private**: Only within the same class
-- **protected**: Same package + subclasses
-- **default**: Same package only
+    public Person(String name, int age) {
+        if (age < 0) {
+            throw new IllegalArgumentException("Age cannot be negative");
+        }
+        this.name = name;
+        this.age = age;
+    }
+
+    public abstract String getDescription();
+}
+
+// Student class extends Person and implements Printable, Comparable
+class Student extends Person implements Printable, Comparable<Student> {
+    private double grade;
+
+    public Student(String name, int age, double grade) {
+        super(name, age);
+        this.grade = grade;
+    }
+
+    @Override
+    public String getDescription() {
+        return "Student: " + name + ", Age: " + age + ", Grade: " + grade;
+    }
+
+    @Override
+    public void printInfo() {
+        System.out.println(getDescription());
+    }
+
+    // Compare students by name
+    @Override
+    public int compareTo(Student other) {
+        return this.name.compareTo(other.name);
+    }
+
+    public int getAge() {
+        return this.age;
+    }
+}
+
+public class CompleteDemoWithoutThreads {
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+        ArrayList<Student> students = new ArrayList<>();
+
+        System.out.print("How many students? ");
+        int count = sc.nextInt();
+        sc.nextLine(); // consume leftover newline
+
+        for (int i = 0; i < count; i++) {
+            System.out.print("Enter name for student " + (i+1) + ": ");
+            String name = sc.nextLine().trim();
+
+            System.out.print("Enter age for " + name + ": ");
+            int age = sc.nextInt();
+
+            System.out.print("Enter grade for " + name + ": ");
+            double grade = sc.nextDouble();
+            sc.nextLine(); // consume newline
+
+            try {
+                // Create student object
+                Student s = new Student(name, age, grade);
+                students.add(s);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Invalid data: " + e.getMessage());
+                i--; // retry this iteration
+            }
+        }
+
+        // Sort the students using Comparable
+        Collections.sort(students);
+
+        // Print sorted students
+        System.out.println("\nStudents sorted by name:");
+        for (Student s : students) {
+            s.printInfo();
+        }
+
+        // ----------------------------
+        // NO THREADS — Calculate average age directly
+        // ----------------------------
+        int totalAge = 0;
+        for (Student s : students) {
+            totalAge += s.getAge();
+        }
+        
+        double averageAge = students.size() > 0 ? 
+                            (double) totalAge / students.size() : 0.0;
+
+        // Print average age
+        System.out.println("\nAverage Age of Students: " + averageAge);
+
+        sc.close();
+    }
+}
+```
 
 ---
 
