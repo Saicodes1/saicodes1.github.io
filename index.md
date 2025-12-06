@@ -186,44 +186,6 @@ public class VariableInitialization {
 }
 ```
 
-#### Default Values in Classes
-
-When you declare instance variables (fields) in a class without initializing them, Java automatically assigns default values. This is a safety feature that prevents undefined behavior. Understanding these defaults is important when reading object state.
-
-Here's a complete reference of default values:
-- **Numeric types** (byte, short, int, long, float, double): 0 or 0.0
-- **boolean**: false
-- **char**: '\u0000' (the null character, which displays as blank)
-- **All reference types** (String, objects, arrays): null
-
-Note that this automatic initialization only happens for instance variables. Local variables in methods do NOT get default values and must be explicitly initialized.
-
-```java
-public class DefaultValues {
-    // These are class fields, they have default values
-    byte defaultByte;          // 0
-    short defaultShort;        // 0
-    int defaultInt;            // 0
-    long defaultLong;          // 0L
-    float defaultFloat;        // 0.0f
-    double defaultDouble;      // 0.0
-    char defaultChar;          // '\u0000' (null character)
-    boolean defaultBoolean;    // false
-    String defaultString;      // null
-    
-    public void displayDefaults() {
-        System.out.println("Default int: " + defaultInt);
-        System.out.println("Default boolean: " + defaultBoolean);
-        System.out.println("Default String: " + defaultString);
-    }
-    
-    public static void main(String[] args) {
-        DefaultValues obj = new DefaultValues();
-        obj.displayDefaults();
-    }
-}
-```
-
 ### Type Casting
 
 **Type casting** is the process of converting a variable from one data type to another. This is necessary when you need to use a value in a context that expects a different type.
@@ -604,14 +566,19 @@ public class Main {
 **Constructors** are special methods that initialize objects when they're created. Key points:
 
 - **Default Constructor**: Parameterless constructor provided by Java if no other constructor is defined
+  ```java
+  class Car {
+    String model;
+
+    // Default constructor
+    Car() {
+        model = "Unknown";
+    }
+  } ```
+
 - **Parameterized Constructor**: Constructor with parameters to initialize specific field values
 - **Constructor Overloading**: Having multiple constructors with different parameters
 - **Constructor Chaining**: Using `this()` to call another constructor in the same class
-
-**Benefits of constructors:**
-- Ensure objects are always in a valid state
-- Reduce repetitive initialization code
-- Allow creating objects with different initial values
 
 **Method Concepts:**
 
